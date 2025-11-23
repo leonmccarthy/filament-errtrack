@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Permissions\Tables;
+namespace App\Filament\Resources\Users\Tables;
 
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
@@ -11,7 +11,7 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class PermissionsTable
+class UsersTable
 {
     public static function configure(Table $table): Table
     {
@@ -20,9 +20,23 @@ class PermissionsTable
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('guard_name')
+                TextColumn::make('email')
+                    ->label('Email address')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('roles.name')
+                    ->label('Role')
+                    ->sortable()
                     ->searchable(),
+                TextColumn::make('email_verified_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -33,11 +47,9 @@ class PermissionsTable
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make()
-                        ->successNotificationTitle('Permission updated successfully'),
+                    EditAction::make(),
                     DeleteAction::make()
-                        ->successNotificationTitle('Permission deleted successfully')
-                ])     
+                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

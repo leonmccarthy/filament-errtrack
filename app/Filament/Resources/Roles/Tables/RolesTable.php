@@ -18,7 +18,8 @@ class RolesTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('guard_name')
                     ->searchable(),
                 TextColumn::make('created_at')

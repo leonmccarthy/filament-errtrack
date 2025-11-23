@@ -18,6 +18,7 @@ class PermissionForm
                             ->required()
                             ->unique(),
                     ])
+                    ->columnSpanFull()
             ]);
     }
 }
