@@ -18,15 +18,21 @@ return new class extends Migration
             $table->string('error_description');
             $table->string('error_steps');
             $table->foreignIdFor(User::class, 'reporter')
+                ->nullable()
                 ->constrained()
-                ->cascadeOnDelete()
+                ->nullOnDelete()
                 ->cascadeOnUpdate();
             $table->string('status')->default('new');
-            $table->string('assigned_to')->nullable();
+            $table->foreignIdFor(User::class, 'assigned_to')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
             $table->string('priority')->default('normal');
             $table->foreignIdFor(User::class, 'assigner')
+                ->nullable()
                 ->constrained()
-                ->cascadeOnDelete()
+                ->nullOnDelete()
                 ->cascadeOnUpdate();
             $table->integer('corrective_actions_to_be_done')->default(0);
             $table->integer('corrective_actions_done')->default(0);

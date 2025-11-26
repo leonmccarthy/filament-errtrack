@@ -15,6 +15,8 @@ class RoleForm
                 Section::make()
                     ->schema([
                         TextInput::make('name')
+                            ->minLength(3)
+                            ->maxLength(30)
                             ->required()
                             ->unique(),
                     ])
