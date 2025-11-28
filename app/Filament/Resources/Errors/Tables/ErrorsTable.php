@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Errors\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -20,9 +21,11 @@ class ErrorsTable
                 TextColumn::make('project_name')
                     ->searchable(),
                 TextColumn::make('error_description')
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap(),
                 TextColumn::make('error_steps')
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap(),
                 TextColumn::make('user.name')
                     ->label('Reporter')
                     ->sortable(),
@@ -40,10 +43,12 @@ class ErrorsTable
                     ->sortable(),
                 TextColumn::make('corrective_actions_to_be_done')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('corrective_actions_done')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -60,6 +65,11 @@ class ErrorsTable
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
+                    Action::make('assign')
+                        ->label('Assign')
+                        ->icon('heroicon-o-clipboard-document-check')
+                        ->color('secondary')
+                        ->url(fn ($record)=> route('filament.admin.resources.errors.assign', $record)),
                     DeleteAction::make()
                         ->successNotificationTitle('Error deleted successfully')
                 ])

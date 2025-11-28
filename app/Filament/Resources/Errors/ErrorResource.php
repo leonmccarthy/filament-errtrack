@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Errors;
 
+use App\Filament\Resources\Errors\Pages\AssignError;
 use App\Filament\Resources\Errors\Pages\CreateError;
 use App\Filament\Resources\Errors\Pages\EditError;
 use App\Filament\Resources\Errors\Pages\ListErrors;
@@ -15,14 +16,17 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ErrorResource extends Resource
 {
     protected static ?string $model = Error::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-archive-box-x-mark';
 
     protected static ?string $recordTitleAttribute = 'Errors';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Error';
 
     public static function form(Schema $schema): Schema
     {
@@ -53,6 +57,7 @@ class ErrorResource extends Resource
             'create' => CreateError::route('/create'),
             'view' => ViewError::route('/{record}'),
             'edit' => EditError::route('/{record}/edit'),
+            'assign' => AssignError::route('/{record}/assign'),
         ];
     }
 }
