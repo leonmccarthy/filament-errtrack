@@ -26,20 +26,34 @@ class ErrorsTable
                 TextColumn::make('error_steps')
                     ->searchable()
                     ->wrap(),
-                TextColumn::make('user.name')
+                TextColumn::make('repoter.name')
                     ->label('Reporter')
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
+                    ->color(fn (string $state)=> match ($state){
+                        'new' => 'primary',
+                        'assigned' => 'warning',
+                        'in_progress' => 'info',
+                        'resolved' => 'success',
+                        'closed' => 'secondary',
+                        default => 'gray',
+                    })
                     ->searchable(),
-                TextColumn::make('assigned_to')
-                    ->numeric()
+                TextColumn::make('assignee.name')
+                    ->label('Assigned To')
                     ->sortable(),
                 TextColumn::make('priority')
                     ->badge()
+                    ->color(fn ($state)=> match ($state){
+                        'low' => 'success',
+                        'medium' => 'warning',
+                        'high' => 'danger',
+                        default => 'gray',
+                    })
                     ->searchable(),
-                TextColumn::make('assigner')
-                    ->numeric()
+                TextColumn::make('assigned_by.name')
+                    ->label('Assigned By')
                     ->sortable(),
                 TextColumn::make('corrective_actions_to_be_done')
                     ->numeric()

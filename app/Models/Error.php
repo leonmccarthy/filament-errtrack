@@ -19,8 +19,18 @@ class Error extends Model
         'corrective_actions_to_be_done',
         'corrective_actions_done',
     ];
-    //
-    public function user(): BelongsTo {
+    
+    //EROR CREATOR
+    public function repoter(): BelongsTo {
         return $this->belongsTo(User::class, 'reporter');
+    }
+
+    //EROR ASSIGNEE
+    public function assignee(): BelongsTo {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function assigned_by(): BelongsTo {
+        return $this->belongsTo(User::class, 'assigner');
     }
 }

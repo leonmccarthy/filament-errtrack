@@ -16,6 +16,9 @@ use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
+use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class AssignError extends Page implements HasForms
 {
@@ -28,28 +31,31 @@ class AssignError extends Page implements HasForms
     protected string $formStatePath = 'data';
     public ?array $data = [];
 
-    public function mount(int|string $record): void
-    {
-        $this->record = $this->resolveRecord($record);
+    public function mount($record): void
+{
+    $this->record = $this->resolveRecord($record);
 
-        $this->form->fill([
-                'project_name' => $this->record->project_name,
-                'error_description' => $this->record->error_description,
-                'error_steps' => $this->record->error_steps,
-                'priority' => $this->record->priority,
-                'assigned_to' => $this->record->assigned_to,
-                'status' => $this->record->status
-            ]
-        );
-    }
+    $this->form->fill(array_merge(
+        $this->record->only([
+            'project_name',
+            'error_description',
+            'error_steps',
+            'priority',
+            'assigned_to',
+            'status',
+        ]),
+        [
+            'reporter' => optional($this->record->repoter)->name,
+        ]
+    ));
+}
 
-    public function getForms(): array
+    public function form(Schema $form): Schema
     {
-        return [
-            'form' => $this->makeForm()
-                ->schema($this->getFormSchema())
-                ->statePath($this->formStatePath),
-        ];
+        return $form
+            ->schema($this->getFormSchema())
+            ->statePath($this->formStatePath);
+            
     }
 
     protected function getFormSchema(): array
@@ -58,8 +64,10 @@ class AssignError extends Page implements HasForms
             Section::make('Error Details')
                 ->schema([
                     TextInput::make('project_name')
-                        ->disabled()
-                        ->columnSpanFull(),
+                        ->disabled(),
+                    TextInput::make('reporter')
+                        ->label('Reporter')
+                        ->disabled(),
                     Textarea::make('error_description')
                         ->rows(4)
                         ->columns(8)
@@ -86,17 +94,22 @@ class AssignError extends Page implements HasForms
                             ->searchable()
                             ->preload()
                             ->required(),
-                        Hidden::make('status')
-                            ->default('assigned'),
                     ])
                     ->columns(2)
         ];
     }
 
     public function submit(){
-        $this->record->update($this->form->getState());
 
-        $this->notify('success', 'Error assigned successfully.');
+        $data = $this->form->getState();
+        $data['assigner'] = Auth::id();
+        $data['status'] = 'assigned';
+        $this->record->update($data);
+
+        Notification::make()
+            ->body('Error assigned successfully.')
+            ->success()
+            ->send();
 
         return redirect()->route('filament.admin.resources.errors.index');
     }

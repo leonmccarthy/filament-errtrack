@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PriorityEnum;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -28,7 +29,7 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('priority')->default('normal');
+            $table->string('priority')->default(PriorityEnum::LOW->value);
             $table->foreignIdFor(User::class, 'assigner')
                 ->nullable()
                 ->constrained()

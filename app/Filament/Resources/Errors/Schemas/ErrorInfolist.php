@@ -17,18 +17,32 @@ class ErrorInfolist
                         TextEntry::make('project_name'),
                         TextEntry::make('error_description'),
                         TextEntry::make('error_steps'),
-                        TextEntry::make('user.name')
+                        TextEntry::make('repoter.name')
                             ->label('Reporter')
                             ->placeholder('-'),
                         TextEntry::make('status')
-                            ->badge(),
-                        TextEntry::make('assigned_to')
-                            ->numeric()
+                            ->badge()
+                            ->color(fn($state)=>match($state){
+                                'new' => 'primary',
+                                'assigned' => 'warning',
+                                'in_progress' => 'info',
+                                'resolved' => 'success',
+                                'closed' => 'secondary',
+                                default => 'gray',
+                            }),
+                        TextEntry::make('assignee.name')
+                            ->label('Assigned To')
                             ->placeholder('-'),
                         TextEntry::make('priority')
-                            ->badge(),
-                        TextEntry::make('assigner')
-                            ->numeric()
+                            ->badge()
+                            ->color(fn ($state)=>match($state){
+                                'low' => 'success',
+                                'medium' => 'warning',
+                                'high' => 'danger',
+                                default => 'gray',
+                            }),
+                        TextEntry::make('assigned_by.name')
+                            ->label('Assigned By')
                             ->placeholder('-'),
                         TextEntry::make('corrective_actions_to_be_done')
                             ->numeric(),
