@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\Errors;
 
+use App\Filament\Resources\Errors\Pages\AllAssignedError;
 use App\Filament\Resources\Errors\Pages\AssignError;
 use App\Filament\Resources\Errors\Pages\CreateError;
 use App\Filament\Resources\Errors\Pages\EditError;
 use App\Filament\Resources\Errors\Pages\ListAllErrors;
+use App\Filament\Resources\Errors\Pages\MyAssignedError;
 use App\Filament\Resources\Errors\Pages\MyReportedError;
 use App\Filament\Resources\Errors\Pages\ViewError;
 use App\Filament\Resources\Errors\Schemas\ErrorForm;
@@ -59,10 +61,13 @@ class ErrorResource extends Resource
         return [
             'index' => ListAllErrors::route('/'),
             'create' => CreateError::route('/create'),
+            'my-reported-errors' => MyReportedError::route('/my-reported-errors'),
+            'my-assigned-errors' => MyAssignedError::route('/my-assigned-errors'),
+            'all-assigned-errors' => AllAssignedError::route('/all-assigned-errors'),
             'view' => ViewError::route('/{record}'),
             'edit' => EditError::route('/{record}/edit'),
             'assign' => AssignError::route('/{record}/assign'),
-            'my-reported-errors' => MyReportedError::route('/my-reported-errors'),
+            
         ];
     }
 
@@ -87,6 +92,20 @@ class ErrorResource extends Resource
                 ->sort(3)
                 ->group('Error')
                 ->isActiveWhen(fn():bool => request()->routeIs('filament.admin.resources.errors.index')),
+            NavigationItem::make('My Assigned Errors')
+                ->label('My Assigned Errors')
+                ->url(static::getUrl('my-assigned-errors'))
+                ->group('Assigned')
+                ->icon('heroicon-o-clipboard-document-check')
+                ->sort(4)
+                ->isActiveWhen(fn():bool => request()->routeIs('filament.admin.resources.errors.my-assigned-errors')),
+            NavigationItem::make('All Assigned Errors')
+                ->label('All Assigned Errors')
+                ->url(static::getUrl('all-assigned-errors'))
+                ->group('Assigned')
+                ->icon('heroicon-o-clipboard-document-list')
+                ->sort(5)
+                ->isActiveWhen( fn():bool => request()->routeIs('filament.admin.resources.errors.all-assigned-errors'))
         ];
     }
 }

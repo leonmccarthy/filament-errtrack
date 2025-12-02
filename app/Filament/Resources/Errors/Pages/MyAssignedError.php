@@ -9,24 +9,24 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 
-class MyReportedError extends ListRecords
+class MyAssignedError extends ListRecords
 {
     protected static string $resource = ErrorResource::class;
-    
+
     public static function shouldRegisterNavigation(array $parameters = []): bool
     {
         return false;
     }
 
     public function getTitle(): string {
-        return 'My Reported Errors';
+        return 'My Assigned Errors';
     }
 
     public function getBreadcrumb(): string|null {
-        return 'My Reported Errors';
+        return 'My Assigned Errors';
     }
 
     public function getTableQuery(): Builder|Relation|null {
-        return parent::getTableQuery()->where('reporter', Auth::id());
+        return parent::getTableQuery()->where('assigned_to', Auth::id());
     }
 }
