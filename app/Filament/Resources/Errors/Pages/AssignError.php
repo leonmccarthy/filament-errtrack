@@ -6,6 +6,7 @@ use App\Enums\PriorityEnum;
 use App\Filament\Resources\Errors\ErrorResource;
 use App\Models\Error;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -14,10 +15,12 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
+use Filament\Schemas\Components\Concerns\HasFooterActions;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
+use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Auth;
 
 class AssignError extends Page implements HasForms
@@ -55,6 +58,7 @@ class AssignError extends Page implements HasForms
         return $form
             ->schema($this->getFormSchema())
             ->statePath($this->formStatePath);
+            
             
     }
 
@@ -96,9 +100,20 @@ class AssignError extends Page implements HasForms
                             ->required(),
                     ])
                     ->columns(2)
+                    ->footerActions([
+                        Action::make('assign')
+                            ->label('Assign Error')
+                            ->action('submit'),
+
+                        Action::make('cancel')
+                            ->label('Cancel')
+                            ->color('gray')
+                            ->url(url()->previous()),
+                    ])
         ];
     }
 
+    // protected function getForm
     public function submit(){
 
         $data = $this->form->getState();

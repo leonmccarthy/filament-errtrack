@@ -6,7 +6,7 @@ use App\Filament\Resources\Errors\ErrorResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
-class ListErrors extends ListRecords
+class ListAllErrors extends ListRecords
 {
     protected static string $resource = ErrorResource::class;
 
@@ -15,5 +15,10 @@ class ListErrors extends ListRecords
         return [
             CreateAction::make()
         ];
+    }
+
+    public static function shouldRegisterNavigation(array $parameters = []): bool
+    {
+        return false;
     }
 }
