@@ -7,6 +7,7 @@ use App\Filament\Resources\Errors\Pages\AssignError;
 use App\Filament\Resources\Errors\Pages\CreateError;
 use App\Filament\Resources\Errors\Pages\EditError;
 use App\Filament\Resources\Errors\Pages\ListAllErrors;
+use App\Filament\Resources\Errors\Pages\ManageErrorSteps;
 use App\Filament\Resources\Errors\Pages\MyAssignedError;
 use App\Filament\Resources\Errors\Pages\MyReportedError;
 use App\Filament\Resources\Errors\Pages\ViewError;
@@ -64,9 +65,11 @@ class ErrorResource extends Resource
             'my-reported-errors' => MyReportedError::route('/my-reported-errors'),
             'my-assigned-errors' => MyAssignedError::route('/my-assigned-errors'),
             'all-assigned-errors' => AllAssignedError::route('/all-assigned-errors'),
+            'manage-error-steps' => ManageErrorSteps::route('/{record}/manage-error-steps'),
             'view' => ViewError::route('/{record}'),
             'edit' => EditError::route('/{record}/edit'),
             'assign' => AssignError::route('/{record}/assign'),
+            
             
         ];
     }
